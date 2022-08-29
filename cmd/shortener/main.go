@@ -21,7 +21,13 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad shortened url in path.", http.StatusBadRequest)
 		return
 	}
-	decodedBytes, err := decode(r.URL.Path[1:])
+	var urlToDecode string
+	if r.URL.Path == "/" {
+		urlToDecode = r.URL.Path[1:]
+	} else {
+		urlToDecode = r.URL.Path
+	}
+	decodedBytes, err := decode(urlToDecode)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
