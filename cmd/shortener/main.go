@@ -27,7 +27,7 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	decoded := string(decodedBytes)
-	if _, err := url.ParseRequestURI(decoded); err != nil {
+	if _, err := url.Parse(decoded); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -46,7 +46,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Request body is empty.", http.StatusBadRequest)
 		return
 	}
-	if _, err := url.ParseRequestURI(string(body)); err != nil {
+	if _, err := url.Parse(string(body)); err != nil {
 		http.Error(w, "Could not parse url from request.", http.StatusBadRequest)
 		return
 	}
