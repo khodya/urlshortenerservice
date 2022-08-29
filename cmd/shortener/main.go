@@ -18,7 +18,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 func getHandler(w http.ResponseWriter, r *http.Request) {
 	if strings.Count(r.URL.Path, "/") > 1 {
-		http.Error(w, "Could not find a shortened url in request.", http.StatusBadRequest)
+		http.Error(w, "Bad shortened url in path.", http.StatusBadRequest)
 		return
 	}
 	decodedBytes, err := decode(r.URL.Path[1:])
