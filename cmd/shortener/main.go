@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -16,11 +17,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/" {
+	if strings.Count(r.URL.Path, "/") > 1 {
 		http.Error(w, "Could not find a shortened url in request.", http.StatusBadRequest)
 		return
 	}
-	println(r.URL.Path)
 	decodedBytes, err := decode(r.URL.Path[1:])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -50,9 +50,9 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Could not parse url from request.", http.StatusBadRequest)
 		return
 	}
-	encodedUrl := encode(body)
+	encodedURL := encode(body)
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(encodedUrl))
+	w.Write([]byte(encodedURL))
 }
 
 func encode(v []byte) string {
