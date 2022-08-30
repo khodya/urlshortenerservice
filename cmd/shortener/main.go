@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+const (
+	scheme      = "http"
+	hostAndPort = "localhost:8080"
+)
+
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		getHandler(w, r)
@@ -57,7 +62,8 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	encodedURL := encode(body)
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(encodedURL))
+	url := &url.URL{Scheme: scheme, Host: hostAndPort, Path: encodedURL}
+	w.Write([]byte(url.String()))
 }
 
 func encode(v []byte) string {
