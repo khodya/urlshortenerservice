@@ -10,7 +10,9 @@ import (
 
 const (
 	scheme      = "http"
-	hostAndPort = "localhost:8080"
+	host        = "localhost"
+	port        = ":8080"
+	hostAndPort = host + port
 )
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +29,7 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var urlToDecode string
-	if r.URL.Path == "/" {
+	if strings.HasPrefix(r.URL.Path, "/") {
 		urlToDecode = r.URL.Path[1:]
 	} else {
 		urlToDecode = r.URL.Path
@@ -76,7 +78,7 @@ func decode(v string) ([]byte, error) {
 
 func main() {
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    port,
 		Handler: http.HandlerFunc(rootHandler),
 	}
 	server.ListenAndServe()
